@@ -42,7 +42,6 @@ export default function ContactForm() {
   async function onSubmit(values: ContactFormValues) {
     try {
       await sendContactMessage(values);
-
       window.alert("Votre message a été envoyé avec succès.");
       reset();
     } catch (error) {
@@ -56,45 +55,55 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto w-full max-w-2xl space-y-6 rounded-2xl border bg-card p-6 shadow-sm"
+      className="mx-auto w-full max-w-2xl space-y-6 rounded-2xl border bg-card p-5 shadow-sm sm:p-6 md:p-8"
       noValidate>
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="full_name">Nom complet</Label>
+          <Label htmlFor="full_name" className="text-base">
+            Nom complet
+          </Label>
           <Input
             id="full_name"
             type="text"
             placeholder="Ex. Joseph Digitell"
+            className="min-h-11 text-base"
             aria-invalid={Boolean(errors.full_name)}
             {...register("full_name")}
           />
           {errors.full_name && (
-            <p className="text-sm text-destructive">
+            <p className="text-sm leading-6 text-destructive">
               {errors.full_name.message}
             </p>
           )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">E-mail</Label>
+          <Label htmlFor="email" className="text-base">
+            E-mail
+          </Label>
           <Input
             id="email"
             type="email"
             placeholder="email@exemple.com"
+            className="min-h-11 text-base"
             aria-invalid={Boolean(errors.email)}
             {...register("email")}
           />
           {errors.email && (
-            <p className="text-sm text-destructive">{errors.email.message}</p>
+            <p className="text-sm leading-6 text-destructive">
+              {errors.email.message}
+            </p>
           )}
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="subject">Sujet</Label>
+        <Label htmlFor="subject" className="text-base">
+          Sujet
+        </Label>
         <select
           id="subject"
-          className="border-input bg-background ring-offset-background focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+          className="border-input bg-background ring-offset-background focus-visible:ring-ring flex min-h-11 w-full rounded-md border px-3 py-2 text-base outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           aria-invalid={Boolean(errors.subject)}
           {...register("subject")}>
           <option value="Demande d'information">Demande d’information</option>
@@ -102,25 +111,35 @@ export default function ContactForm() {
           <option value="Rejoindre l'équipe">Rejoindre l’équipe</option>
         </select>
         {errors.subject && (
-          <p className="text-sm text-destructive">{errors.subject.message}</p>
+          <p className="text-sm leading-6 text-destructive">
+            {errors.subject.message}
+          </p>
         )}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="message">Message</Label>
+        <Label htmlFor="message" className="text-base">
+          Message
+        </Label>
         <Textarea
           id="message"
-          rows={6}
+          rows={7}
           placeholder="Comment pouvons-nous vous aider ?"
+          className="min-h-40 resize-y text-base leading-7"
           aria-invalid={Boolean(errors.message)}
           {...register("message")}
         />
         {errors.message && (
-          <p className="text-sm text-destructive">{errors.message.message}</p>
+          <p className="text-sm leading-6 text-destructive">
+            {errors.message.message}
+          </p>
         )}
       </div>
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        className="min-h-12 w-full text-base"
+        disabled={isSubmitting}>
         {isSubmitting ? "Envoi en cours..." : "Envoyer le message"}
       </Button>
     </form>
