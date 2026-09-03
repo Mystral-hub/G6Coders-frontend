@@ -1,5 +1,7 @@
 export const ROUTES = {
   home: "/",
+  gallery: "/gallery",
+  projects: "/projects",
   admin: {
     login: "/admin/login",
     dashboard: "/admin",

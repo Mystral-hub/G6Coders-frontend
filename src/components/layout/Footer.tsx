@@ -9,12 +9,12 @@ export default function Footer() {
     <footer className="border-t bg-secondary text-secondary-foreground">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 lg:grid-cols-[1.3fr_1fr_1fr] lg:px-8">
         <div>
-          <Link to={ROUTES.home} className="inline-flex items-center gap-3">
+          <Link to={ROUTES.home} className="inline-flex items-center gap-1">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-base font-bold text-primary-foreground">
               G6
             </span>
             <span className="text-xl font-bold tracking-tight">
-              G6<span className="text-primary">Coders</span>
+              <span className="text-primary">Coders</span>
             </span>
           </Link>
 

@@ -17,7 +17,7 @@ export default function About() {
         </div>
 
         <div>
-          <span className="rounded-full bg-primary/10 px-3 py-2 text-sm font-semibold uppercase tracking-wider text-primary">
+          <span className="rounded-full bg-primary/20 px-3 py-2 text-sm md:text-lg font-semibold uppercase tracking-wider text-primary">
             Pourquoi G6Coders ?
           </span>
 
