@@ -8,11 +8,11 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
   server: {
     host: true,
-    allowedHosts: ["6021-41-202-207-172.ngrok-free.app"],
+    allowedHosts: [""],
   },
 });
