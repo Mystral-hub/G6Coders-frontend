@@ -9,7 +9,7 @@ import {
 import { getTeamMembers, type TeamMember } from "@/api/team";
 import TechnicalStackCard from "@/components/team/TechnicalStackCard";
 
-const CARD_SCROLL_OFFSET = 320;
+const CARD_SCROLL_OFFSET = 240;
 
 function TeamMemberSkeleton() {
   return (
