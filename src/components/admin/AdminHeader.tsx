@@ -23,7 +23,9 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
       </button>
 
       <div className="hidden md:block">
-        <p className="text-xs text-muted-foreground">Espace d’administration</p>
+        <p className="text-xs md:text-md text-muted-foreground">
+          Espace d’administration
+        </p>
 
         <p className="text-sm font-semibold">Bienvenue, {username}</p>
       </div>
