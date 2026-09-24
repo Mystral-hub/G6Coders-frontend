@@ -2,13 +2,17 @@ import {
   BarChart3,
   Bell,
   FolderKanban,
+  Handshake,
   Images,
   LayoutDashboard,
   LogOut,
   MessageSquareQuote,
   X,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+} from "react-router-dom";
 
 import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/routes/routePaths";
@@ -25,30 +29,42 @@ const navItems = [
     icon: LayoutDashboard,
     exact: true,
   },
+
   {
     path: ROUTES.admin.projects,
     label: "Projets",
     icon: FolderKanban,
     exact: false,
   },
+
+  {
+    path: ROUTES.admin.partners,
+    label: "Partenaires",
+    icon: Handshake,
+    exact: false,
+  },
+
   {
     path: ROUTES.admin.announcements,
     label: "Annonces",
     icon: Bell,
     exact: false,
   },
+
   {
     path: ROUTES.admin.gallery,
     label: "Galerie",
     icon: Images,
     exact: false,
   },
+
   {
     path: ROUTES.admin.testimonials,
     label: "Témoignages",
     icon: MessageSquareQuote,
     exact: false,
   },
+
   {
     path: ROUTES.admin.stats,
     label: "Statistiques",
@@ -57,7 +73,10 @@ const navItems = [
   },
 ];
 
-export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
+export default function AdminSidebar({
+  open,
+  onClose,
+}: AdminSidebarProps) {
   const location = useLocation();
   const { logout } = useAuth();
 
@@ -66,7 +85,10 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
     logout();
   }
 
-  function isActive(path: string, exact: boolean) {
+  function isActive(
+    path: string,
+    exact: boolean,
+  ) {
     return exact
       ? location.pathname === path
       : location.pathname.startsWith(path);
@@ -75,7 +97,9 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
   return (
     <aside
       className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-border bg-background transition-transform duration-200 md:static md:translate-x-0 ${
-        open ? "translate-x-0" : "-translate-x-full"
+        open
+          ? "translate-x-0"
+          : "-translate-x-full"
       }`}
       aria-label="Navigation administrateur">
       <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-5">
@@ -102,20 +126,28 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
 
         {navItems.map((item) => {
           const Icon = item.icon;
-          const active = isActive(item.path, item.exact);
+          const active = isActive(
+            item.path,
+            item.exact,
+          );
 
           return (
             <Link
               key={item.path}
               to={item.path}
               onClick={onClose}
-              aria-current={active ? "page" : undefined}
+              aria-current={
+                active ? "page" : undefined
+              }
               className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                 active
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}>
-              <Icon size={18} strokeWidth={active ? 2.4 : 2} />
+              <Icon
+                size={18}
+                strokeWidth={active ? 2.4 : 2}
+              />
 
               <span>{item.label}</span>
             </Link>
