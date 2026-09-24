@@ -12,6 +12,7 @@ import {
 
 import AdminConfirmDialog from "@/components/admin/AdminConfirmDialog";
 import AdminNoticeDialog from "@/components/admin/AdminNoticeDialog";
+import PartnerAdminCard from "@/components/admin/PartnerAdminCard";
 import PartnerFormModal from "@/components/admin/PartnerFormModal";
 
 interface NoticeState {
@@ -266,72 +267,88 @@ export default function AdminPartnersPage() {
       )}
 
       {!isLoading && !hasError && partners.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-175 text-left text-sm">
-              <thead className="border-b bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
-                <tr>
-                  <th className="px-5 py-4 font-semibold">Partenaire</th>
+        <>
+          {/* Tableau visible uniquement sur ordinateur */}
+          <div className="hidden overflow-hidden rounded-2xl border bg-background shadow-sm md:block">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-175 text-left text-sm">
+                <thead className="border-b bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
+                  <tr>
+                    <th className="px-5 py-4 font-semibold">Partenaire</th>
 
-                  <th className="px-5 py-4 font-semibold">Statut</th>
+                    <th className="px-5 py-4 font-semibold">Statut</th>
 
-                  <th className="px-5 py-4 font-semibold">Type</th>
+                    <th className="px-5 py-4 font-semibold">Type</th>
 
-                  <th className="px-5 py-4 text-right font-semibold">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y">
-                {partners.map((partner) => (
-                  <tr key={partner.id} className="align-middle">
-                    <td className="px-5 py-4">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={partner.image_url}
-                          alt={`Logo de ${partner.name}`}
-                          className="h-12 w-12 rounded-lg border object-contain p-1"
-                        />
-
-                        <span className="font-semibold">{partner.name}</span>
-                      </div>
-                    </td>
-
-                    <td className="px-5 py-4 text-muted-foreground">
-                      {partner.partner_status}
-                    </td>
-
-                    <td className="px-5 py-4 text-muted-foreground">
-                      {partner.partnership_type}
-                    </td>
-
-                    <td className="px-5 py-4">
-                      <div className="flex justify-end gap-2">
-                        <button
-                          type="button"
-                          onClick={() => openEditModal(partner)}
-                          className="rounded-lg border p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
-                          aria-label={`Modifier ${partner.name}`}>
-                          <Pencil className="h-4 w-4" />
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setPartnerToDelete(partner)}
-                          disabled={deletingId === partner.id}
-                          className="rounded-lg border p-2 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive disabled:opacity-50"
-                          aria-label={`Supprimer ${partner.name}`}>
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
+                    <th className="px-5 py-4 text-right font-semibold">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody className="divide-y">
+                  {partners.map((partner) => (
+                    <tr key={partner.id} className="align-middle">
+                      <td className="px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={partner.image_url}
+                            alt={`Logo de ${partner.name}`}
+                            className="h-12 w-12 rounded-lg border object-contain p-1"
+                          />
+
+                          <span className="font-semibold">{partner.name}</span>
+                        </div>
+                      </td>
+
+                      <td className="px-5 py-4 text-muted-foreground">
+                        {partner.partner_status}
+                      </td>
+
+                      <td className="px-5 py-4 text-muted-foreground">
+                        {partner.partnership_type}
+                      </td>
+
+                      <td className="px-5 py-4">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => openEditModal(partner)}
+                            className="rounded-lg border p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                            aria-label={`Modifier ${partner.name}`}>
+                            <Pencil className="h-4 w-4" />
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setPartnerToDelete(partner)}
+                            disabled={deletingId === partner.id}
+                            className="rounded-lg border p-2 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive disabled:opacity-50"
+                            aria-label={`Supprimer ${partner.name}`}>
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+
+          {/* Cartes visibles uniquement sur mobile */}
+          <div className="grid gap-4 md:hidden">
+            {partners.map((partner) => (
+              <PartnerAdminCard
+                key={partner.id}
+                partner={partner}
+                isDeleting={deletingId === partner.id}
+                onEdit={openEditModal}
+                onDelete={setPartnerToDelete}
+              />
+            ))}
+          </div>
+        </>
       )}
 
       <PartnerFormModal

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { Pencil, Plus, Trash2, Users } from "lucide-react";
+import {
+  Pencil,
+  Plus,
+  Trash2,
+  Users,
+} from "lucide-react";
 
 import {
   createTeamMember,
@@ -12,6 +17,7 @@ import {
 
 import AdminConfirmDialog from "@/components/admin/AdminConfirmDialog";
 import AdminNoticeDialog from "@/components/admin/AdminNoticeDialog";
+import TeamMemberAdminCard from "@/components/admin/TeamMemberAdminCard";
 import TeamMemberFormModal from "@/components/admin/TeamMemberFormModal";
 
 interface NoticeState {
@@ -23,14 +29,22 @@ interface NoticeState {
 export default function AdminTeamPage() {
   const [members, setMembers] = useState<TeamMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [formError, setFormError] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
-  const [memberToDelete, setMemberToDelete] = useState<TeamMember | null>(null);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
-  const [notice, setNotice] = useState<NoticeState | null>(null);
+  const [isSubmitting, setIsSubmitting] =
+    useState(false);
+  const [hasError, setHasError] =
+    useState(false);
+  const [formError, setFormError] =
+    useState("");
+  const [isModalOpen, setIsModalOpen] =
+    useState(false);
+  const [editingMember, setEditingMember] =
+    useState<TeamMember | null>(null);
+  const [memberToDelete, setMemberToDelete] =
+    useState<TeamMember | null>(null);
+  const [deletingId, setDeletingId] =
+    useState<number | null>(null);
+  const [notice, setNotice] =
+    useState<NoticeState | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -44,7 +58,10 @@ export default function AdminTeamPage() {
           setHasError(false);
         }
       } catch (error) {
-        console.error("Impossible de charger les membres de l’équipe :", error);
+        console.error(
+          "Impossible de charger les membres de l’équipe :",
+          error,
+        );
 
         if (isMounted) {
           setHasError(true);
@@ -76,9 +93,13 @@ export default function AdminTeamPage() {
 
     try {
       const data = await getTeamMembers();
+
       setMembers(data);
     } catch (error) {
-      console.error("Impossible de charger les membres de l’équipe :", error);
+      console.error(
+        "Impossible de charger les membres de l’équipe :",
+        error,
+      );
 
       setHasError(true);
 
@@ -115,17 +136,25 @@ export default function AdminTeamPage() {
     setFormError("");
   }
 
-  async function handleSubmit(values: TeamMemberFormValues) {
+  async function handleSubmit(
+    values: TeamMemberFormValues,
+  ) {
     setIsSubmitting(true);
     setFormError("");
 
     try {
       if (editingMember) {
-        const updatedMember = await updateTeamMember(editingMember.id, values);
+        const updatedMember =
+          await updateTeamMember(
+            editingMember.id,
+            values,
+          );
 
         setMembers((current) =>
           current.map((member) =>
-            member.id === updatedMember.id ? updatedMember : member,
+            member.id === updatedMember.id
+              ? updatedMember
+              : member,
           ),
         );
 
@@ -136,21 +165,29 @@ export default function AdminTeamPage() {
             "Les informations du membre ont été mises à jour avec succès.",
         });
       } else {
-        const createdMember = await createTeamMember(values);
+        const createdMember =
+          await createTeamMember(values);
 
-        setMembers((current) => [createdMember, ...current]);
+        setMembers((current) => [
+          createdMember,
+          ...current,
+        ]);
 
         setNotice({
           type: "success",
           title: "Membre ajouté",
-          message: "Le membre a été ajouté avec succès.",
+          message:
+            "Le membre a été ajouté avec succès.",
         });
       }
 
       setIsModalOpen(false);
       setEditingMember(null);
     } catch (error) {
-      console.error("Impossible d’enregistrer le membre :", error);
+      console.error(
+        "Impossible d’enregistrer le membre :",
+        error,
+      );
 
       setFormError(
         "L’enregistrement a échoué. Vérifiez les champs et réessayez.",
@@ -172,7 +209,11 @@ export default function AdminTeamPage() {
     try {
       await deleteTeamMember(member.id);
 
-      setMembers((current) => current.filter((item) => item.id !== member.id));
+      setMembers((current) =>
+        current.filter(
+          (item) => item.id !== member.id,
+        ),
+      );
 
       setMemberToDelete(null);
 
@@ -182,14 +223,18 @@ export default function AdminTeamPage() {
         message: `Le membre « ${member.name} » a été supprimé avec succès.`,
       });
     } catch (error) {
-      console.error("Impossible de supprimer le membre :", error);
+      console.error(
+        "Impossible de supprimer le membre :",
+        error,
+      );
 
       setMemberToDelete(null);
 
       setNotice({
         type: "error",
         title: "Suppression impossible",
-        message: "La suppression a échoué. Veuillez réessayer.",
+        message:
+          "La suppression a échoué. Veuillez réessayer.",
       });
     } finally {
       setDeletingId(null);
@@ -204,7 +249,9 @@ export default function AdminTeamPage() {
             Contenu public
           </p>
 
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">Équipe</h1>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight">
+            Équipe
+          </h1>
 
           <p className="mt-2 max-w-2xl text-muted-foreground">
             Gérez les membres et les compétences affichés sur la page d’accueil.
@@ -215,7 +262,10 @@ export default function AdminTeamPage() {
           type="button"
           onClick={openCreateModal}
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">
-          <Plus className="h-4 w-4" aria-hidden="true" />
+          <Plus
+            className="h-4 w-4"
+            aria-hidden="true"
+          />
           Ajouter un membre
         </button>
       </div>
@@ -241,105 +291,147 @@ export default function AdminTeamPage() {
         </div>
       )}
 
-      {!isLoading && !hasError && members.length === 0 && (
-        <div className="rounded-2xl border bg-background p-10 text-center">
-          <Users
-            className="mx-auto h-10 w-10 text-primary"
-            aria-hidden="true"
-          />
+      {!isLoading &&
+        !hasError &&
+        members.length === 0 && (
+          <div className="rounded-2xl border bg-background p-10 text-center">
+            <Users
+              className="mx-auto h-10 w-10 text-primary"
+              aria-hidden="true"
+            />
 
-          <p className="mt-4 text-muted-foreground">
-            Aucun membre d’équipe n’est enregistré pour le moment.
-          </p>
+            <p className="mt-4 text-muted-foreground">
+              Aucun membre d’équipe n’est enregistré pour le moment.
+            </p>
 
-          <button
-            type="button"
-            onClick={openCreateModal}
-            className="mt-5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">
-            Ajouter le premier membre
-          </button>
-        </div>
-      )}
-
-      {!isLoading && !hasError && members.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-225 text-left text-sm">
-              <thead className="border-b bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
-                <tr>
-                  <th className="px-5 py-4 font-semibold">Membre</th>
-
-                  <th className="px-5 py-4 font-semibold">Rôle</th>
-
-                  <th className="px-5 py-4 font-semibold">Compétences</th>
-
-                  <th className="px-5 py-4 text-right font-semibold">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y">
-                {members.map((member) => (
-                  <tr key={member.id} className="align-middle">
-                    <td className="px-5 py-4">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={member.image_url}
-                          alt={`Photo de ${member.name}`}
-                          className="h-12 w-12 rounded-full border object-cover"
-                        />
-
-                        <span className="font-semibold">{member.name}</span>
-                      </div>
-                    </td>
-
-                    <td className="px-5 py-4 text-muted-foreground">
-                      {member.role}
-                    </td>
-
-                    <td className="px-5 py-4">
-                      <div className="flex max-w-md flex-wrap gap-1.5">
-                        {member.skills.map((skill) => (
-                          <span
-                            key={skill}
-                            className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-black">
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-
-                    <td className="px-5 py-4">
-                      <div className="flex justify-end gap-2">
-                        <button
-                          type="button"
-                          onClick={() => openEditModal(member)}
-                          className="rounded-lg border p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
-                          aria-label={`Modifier ${member.name}`}>
-                          <Pencil className="h-4 w-4" />
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setMemberToDelete(member)}
-                          disabled={deletingId === member.id}
-                          className="rounded-lg border p-2 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive disabled:opacity-50"
-                          aria-label={`Supprimer ${member.name}`}>
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <button
+              type="button"
+              onClick={openCreateModal}
+              className="mt-5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">
+              Ajouter le premier membre
+            </button>
           </div>
-        </div>
-      )}
+        )}
+
+      {!isLoading &&
+        !hasError &&
+        members.length > 0 && (
+          <>
+            {/* Tableau visible uniquement sur ordinateur */}
+            <div className="hidden overflow-hidden rounded-2xl border bg-background shadow-sm md:block">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-225 text-left text-sm">
+                  <thead className="border-b bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground">
+                    <tr>
+                      <th className="px-5 py-4 font-semibold">
+                        Membre
+                      </th>
+
+                      <th className="px-5 py-4 font-semibold">
+                        Rôle
+                      </th>
+
+                      <th className="px-5 py-4 font-semibold">
+                        Compétences
+                      </th>
+
+                      <th className="px-5 py-4 text-right font-semibold">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="divide-y">
+                    {members.map((member) => (
+                      <tr
+                        key={member.id}
+                        className="align-middle">
+                        <td className="px-5 py-4">
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={member.image_url}
+                              alt={`Photo de ${member.name}`}
+                              className="h-12 w-12 rounded-full border object-cover"
+                            />
+
+                            <span className="font-semibold">
+                              {member.name}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td className="px-5 py-4 text-muted-foreground">
+                          {member.role}
+                        </td>
+
+                        <td className="px-5 py-4">
+                          <div className="flex max-w-md flex-wrap gap-1.5">
+                            {member.skills.map(
+                              (skill) => (
+                                <span
+                                  key={skill}
+                                  className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-black">
+                                  {skill}
+                                </span>
+                              ),
+                            )}
+                          </div>
+                        </td>
+
+                        <td className="px-5 py-4">
+                          <div className="flex justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                openEditModal(member)
+                              }
+                              className="rounded-lg border p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                              aria-label={`Modifier ${member.name}`}>
+                              <Pencil className="h-4 w-4" />
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setMemberToDelete(member)
+                              }
+                              disabled={
+                                deletingId === member.id
+                              }
+                              className="rounded-lg border p-2 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive disabled:opacity-50"
+                              aria-label={`Supprimer ${member.name}`}>
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Cartes visibles uniquement sur mobile */}
+            <div className="grid gap-4 md:hidden">
+              {members.map((member) => (
+                <TeamMemberAdminCard
+                  key={member.id}
+                  member={member}
+                  isDeleting={
+                    deletingId === member.id
+                  }
+                  onEdit={openEditModal}
+                  onDelete={setMemberToDelete}
+                />
+              ))}
+            </div>
+          </>
+        )}
 
       <TeamMemberFormModal
-        key={`${isModalOpen ? "open" : "closed"}-${editingMember?.id ?? "new"}`}
+        key={`${isModalOpen ? "open" : "closed"}-${
+          editingMember?.id ?? "new"
+        }`}
         open={isModalOpen}
         member={editingMember}
         isSubmitting={isSubmitting}
@@ -357,7 +449,9 @@ export default function AdminTeamPage() {
             : ""
         }
         isLoading={deletingId !== null}
-        onCancel={() => setMemberToDelete(null)}
+        onCancel={() =>
+          setMemberToDelete(null)
+        }
         onConfirm={() => void confirmDelete()}
       />
 
