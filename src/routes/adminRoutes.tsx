@@ -10,6 +10,7 @@ import AdminLoginPage from "@/pages/admin/AdminLoginPage";
 import AdminPartnersPage from "@/pages/admin/AdminPartnersPage";
 import AdminProjectsPage from "@/pages/admin/AdminProjectsPage";
 import AdminStatsPage from "@/pages/admin/AdminStatsPage";
+import AdminTeamPage from "@/pages/admin/AdminTeamPage";
 import AdminTestimonialsPage from "@/pages/admin/AdminTestimonialsPage";
 
 import { ROUTES } from "@/routes/routePaths";
@@ -39,6 +40,11 @@ export const adminRoutes: RouteObject[] = [
           {
             path: ROUTES.admin.partners,
             element: <AdminPartnersPage />,
+          },
+
+          {
+            path: ROUTES.admin.team,
+            element: <AdminTeamPage />,
           },
 
           {

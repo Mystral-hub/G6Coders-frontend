@@ -8,6 +8,7 @@ export const ROUTES = {
     dashboard: "/admin",
     projects: "/admin/projects",
     partners: "/admin/partners",
+    team: "/admin/team",
     announcements: "/admin/announcements",
     gallery: "/admin/gallery",
     testimonials: "/admin/testimonials",
