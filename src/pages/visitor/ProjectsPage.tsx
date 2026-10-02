@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, Code2, FolderKanban } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Code2,
+  ExternalLink,
+  FolderKanban,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 import {
@@ -8,7 +14,7 @@ import {
   type ProjectPage,
 } from "@/api/projectsApi";
 
-const PROJECTS_PER_PAGE = 10;
+const PROJECTS_PER_PAGE = 6;
 
 function ProjectsSkeleton() {
   return (
@@ -45,12 +51,16 @@ function Pagination({
         onClick={onPrevious}
         disabled={!pagination.has_previous}
         className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
-        <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+        <ArrowLeft
+          className="h-4 w-4"
+          aria-hidden="true"
+        />
         Précédents
       </button>
 
       <span className="text-sm font-medium text-muted-foreground">
-        Page {pagination.page} sur {pagination.total_pages}
+        Page {pagination.page} sur{" "}
+        {pagination.total_pages}
       </span>
 
       <button
@@ -59,41 +69,51 @@ function Pagination({
         disabled={!pagination.has_next}
         className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition hover:bg-accent disabled:pointer-events-none disabled:opacity-40">
         Suivants
-        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+
+        <ArrowRight
+          className="h-4 w-4"
+          aria-hidden="true"
+        />
       </button>
     </nav>
   );
 }
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [pagination, setPagination] = useState<ProjectPage | null>(null);
+  const [projects, setProjects] =
+    useState<Project[]>([]);
+  const [pagination, setPagination] =
+    useState<ProjectPage | null>(null);
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] =
+    useState(true);
+  const [hasError, setHasError] =
+    useState(false);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadProjects() {
-      setIsLoading(true);
-      setHasError(false);
-
       try {
-        const data = await getProjectsPage(page, PROJECTS_PER_PAGE);
+        const data = await getProjectsPage(
+          page,
+          PROJECTS_PER_PAGE,
+        );
 
         if (isMounted) {
           setProjects(data.items);
           setPagination(data);
+          setIsLoading(false);
+          setHasError(false);
         }
       } catch (error) {
-        console.error("Impossible de charger les projets :", error);
+        console.error(
+          "Impossible de charger les projets :",
+          error,
+        );
 
         if (isMounted) {
           setHasError(true);
-        }
-      } finally {
-        if (isMounted) {
           setIsLoading(false);
         }
       }
@@ -113,13 +133,19 @@ export default function ProjectsPage() {
           <Link
             to="/"
             className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-primary transition hover:gap-3">
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            <ArrowLeft
+              className="h-4 w-4"
+              aria-hidden="true"
+            />
             Retour à l’accueil
           </Link>
 
           <div className="max-w-3xl">
             <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-2 text-sm font-semibold uppercase tracking-wider text-primary">
-              <FolderKanban className="h-4 w-4" aria-hidden="true" />
+              <FolderKanban
+                className="h-4 w-4"
+                aria-hidden="true"
+              />
               Nos projets
             </span>
 
@@ -128,8 +154,7 @@ export default function ProjectsPage() {
             </h1>
 
             <p className="mt-5 text-lg leading-8 text-muted-foreground sm:text-xl">
-              Explorez les projets réalisés par notre équipe et découvrez notre
-              approche du développement logiciel.
+              Explorez les projets réalisés par notre équipe et découvrez notre approche du développement logiciel.
             </p>
           </div>
         </div>
@@ -161,7 +186,10 @@ export default function ProjectsPage() {
                     </div>
                   ) : (
                     <div className="flex aspect-video items-center justify-center bg-primary/10 text-primary">
-                      <Code2 className="h-16 w-16" aria-hidden="true" />
+                      <Code2
+                        className="h-16 w-16"
+                        aria-hidden="true"
+                      />
                     </div>
                   )}
 
@@ -173,6 +201,20 @@ export default function ProjectsPage() {
                     <p className="mt-4 text-base leading-7 text-muted-foreground">
                       {project.description}
                     </p>
+
+                    {project.project_url && (
+                      <a
+                        href={project.project_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">
+                        <ExternalLink
+                          className="h-4 w-4"
+                          aria-hidden="true"
+                        />
+                        Voir le projet
+                      </a>
+                    )}
                   </div>
                 </article>
               ))}
@@ -181,31 +223,42 @@ export default function ProjectsPage() {
             {pagination && (
               <Pagination
                 pagination={pagination}
-                onPrevious={() => setPage((currentPage) => currentPage - 1)}
-                onNext={() => setPage((currentPage) => currentPage + 1)}
+                onPrevious={() =>
+                  setPage(
+                    (currentPage) =>
+                      currentPage - 1,
+                  )
+                }
+                onNext={() =>
+                  setPage(
+                    (currentPage) =>
+                      currentPage + 1,
+                  )
+                }
               />
             )}
           </>
         )}
 
-        {!isLoading && projects.length === 0 && !hasError && (
-          <div className="rounded-2xl border bg-background p-10 text-center">
-            <FolderKanban
-              className="mx-auto h-10 w-10 text-primary"
-              aria-hidden="true"
-            />
+        {!isLoading &&
+          projects.length === 0 &&
+          !hasError && (
+            <div className="rounded-2xl border bg-background p-10 text-center">
+              <FolderKanban
+                className="mx-auto h-10 w-10 text-primary"
+                aria-hidden="true"
+              />
 
-            <p className="mt-4 text-lg text-muted-foreground">
-              Aucun projet n’est disponible pour le moment.
-            </p>
-          </div>
-        )}
+              <p className="mt-4 text-lg text-muted-foreground">
+                Aucun projet n’est disponible pour le moment.
+              </p>
+            </div>
+          )}
 
         {!isLoading && hasError && (
           <div className="rounded-2xl border bg-background p-10 text-center">
             <p className="text-lg text-muted-foreground">
-              Les projets sont momentanément indisponibles. Veuillez réessayer
-              plus tard.
+              Les projets sont momentanément indisponibles. Veuillez réessayer plus tard.
             </p>
           </div>
         )}
