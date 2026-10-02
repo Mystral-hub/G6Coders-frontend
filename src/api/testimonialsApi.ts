@@ -14,8 +14,12 @@ export interface CreateTestimonialPayload {
   rating: number;
 }
 
-export async function getTestimonials(): Promise<Testimonial[]> {
-  const response = await api.get<Testimonial[]>("/testimonials/");
+export async function getTestimonials(): Promise<
+  Testimonial[]
+> {
+  const response = await api.get<Testimonial[]>(
+    "/testimonials/",
+  );
 
   return response.data;
 }
@@ -23,7 +27,18 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 export async function createTestimonial(
   payload: CreateTestimonialPayload,
 ): Promise<Testimonial> {
-  const response = await api.post<Testimonial>("/testimonials/", payload);
+  const response = await api.post<Testimonial>(
+    "/testimonials/",
+    payload,
+  );
 
   return response.data;
+}
+
+export async function deleteTestimonial(
+  testimonialId: number,
+): Promise<void> {
+  await api.delete(
+    `/testimonials/${testimonialId}`,
+  );
 }
